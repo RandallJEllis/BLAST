@@ -46,11 +46,13 @@ for gene in genes:
                 homologies.append(ident)
                 time.sleep(1)
         else:
+            query_accession_numbers.append("No homologs")
             accession_numbers.append("No homologs")
             homologies.append("No homologs")
             time.sleep(1)
             continue
     else:
+        query_accession_numbers.append("No FASTA seq")
         accession_numbers.append("No FASTA seq")
         homologies.append("No FASTA seq")
         time.sleep(1)
