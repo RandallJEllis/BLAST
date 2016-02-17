@@ -33,16 +33,21 @@ for gene in genes:
         
         blastp_cline = open(filename[:-5] + ".xml")
         blast_record = NCBIXML.read(blastp_cline)
-        for alignment in blast_record.alignments:
-            hsp = alignment.hsps[0]
-            ident = float(hsp.identities)/hsp.align_length
-            accession = alignment.accession
-            accession_numbers.append(accession)
-            homologies.append(ident)
-            time.sleep(1)
+        if len(blast_record.alignments) > 0:
+            for alignment in blast_record.alignments:
+                hsp = alignment.hsps[0]
+                ident = float(hsp.identities)/hsp.align_length
+                accession = alignment.accession
+                accession_numbers.append(accession)
+                homologies.append(ident)
+                time.sleep(1)
+        else:
+            accession_numbers.append("No homologs")
+            homologies.append("No homologs")
+            continue
     else:
-        accession_numbers.append("0")
-        homologies.append("0")
+        accession_numbers.append("No FASTA seq")
+        homologies.append("No FASTA seq")
         continue
     
 rows = zip(genes, accession_numbers, homologies)
