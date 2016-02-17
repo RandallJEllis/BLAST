@@ -44,10 +44,13 @@ for gene in genes:
         else:
             accession_numbers.append("No homologs")
             homologies.append("No homologs")
+            time.sleep(1)
             continue
+
     else:
         accession_numbers.append("No FASTA seq")
         homologies.append("No FASTA seq")
+        time.sleep(1)
         continue
     
 rows = zip(genes, accession_numbers, homologies)
