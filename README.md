@@ -1,3 +1,5 @@
 # BLAST
 
-A repository for BLAST-related tools!
+A repository for BLAST-related tools.
+
+RandallJEllis@gmail.com
