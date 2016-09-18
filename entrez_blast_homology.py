@@ -10,10 +10,12 @@ from Bio.Blast import NCBIXML
 import csv
 import time
 
+#Follow the rules and tell the NCBI who you are
 Entrez.email = "randalljellis@gmail.com"
-Tool = "SoularBLASTer"
 
+#import text file of list of genes
 genes = [gene.rstrip('\n') for gene in open('genes.txt')]
+
 query_accession_numbers = []
 accession_numbers = []
 homologies = []
@@ -23,6 +25,8 @@ for gene in genes:
     record = Entrez.read(handle)
     
     if len(record["IdList"]) > 0:
+        
+        #obtain FASTA sequence
         query_accession_numbers.append(record["IdList"][0])
         get_fasta = Entrez.efetch(db="protein", id=record["IdList"][0], rettype="fasta", retmode="text")
         filename = record["IdList"][0] + '.fasta'
@@ -31,10 +35,11 @@ for gene in genes:
         out_handle.close()
         get_fasta.close()
         
+        #BLAST output
         blastp_cline = NcbiblastpCommandline(query=filename, db="nr", evalue=0.001, outfmt=5, out=filename[:-5] + ".xml", num_alignments=1, entrez_query="human[Organism]", remote=True)
-        
         stdout, stderr = blastp_cline()
         
+        #Parse XML output file
         blastp_cline = open(filename[:-5] + ".xml")
         blast_record = NCBIXML.read(blastp_cline)
         if len(blast_record.alignments) > 0:
@@ -57,7 +62,8 @@ for gene in genes:
         homologies.append("No FASTA seq")
         time.sleep(1)
         continue
-    
+
+#write homologies to CSV
 rows = zip(genes, query_accession_numbers, accession_numbers, homologies)
 with open('homologies.csv', 'wb') as thefile:
     writer = csv.writer(thefile)
